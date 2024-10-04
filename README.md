@@ -6,6 +6,9 @@
 
 ## Features
 
+<details>
+<summary>Expand</summary>
+
 | Feature                               | Supported |
 |---------------------------------------|:---------:|
 | Multithreading                        |    ✔️     |
@@ -19,6 +22,8 @@
 | Auto-upgrade boosters                 |    ✔️     |
 | Night sleep mode                      |    ✔️     |
 | Analytics game events                 |    ✔️     |
+
+</details>
 
 ## [Settings](https://github.com/dedkuzmich/NotPixelBot/blob/master/example_config.txt/)
 
@@ -58,6 +63,9 @@ Before you begin, make sure you have the following installed:
 
 ### Quick setup on Linux:
 
+<details>
+<summary>Expand</summary>
+
 Install Python 3.12:
 
 ```shell
@@ -82,6 +90,8 @@ Install dev packages:
 ```shell
 sudo apt install build-essential python3.12-dev
 ```
+
+</details>
 
 ## Obtaining and setting API Keys
 
