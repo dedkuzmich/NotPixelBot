@@ -66,7 +66,7 @@ sudo add-apt-repository ppa:deadsnakes/ppa
 sudo apt update && sudo apt install python3.12
 ```
 
-Install pip & poetry:
+Install Pip & Poetry:
 
 ```shell
 curl -sS https://bootstrap.pypa.io/get-pip.py | python3.12
@@ -86,9 +86,8 @@ sudo apt install build-essential python3.12-dev
 ## Obtaining and setting API Keys
 
 1. Go to [**my.telegram.org**](https://my.telegram.org/auth) and log in using your phone number.
-2. Select `API development tools` and fill out the form to register a new application.
-3. Record the `API_ID` and `API_HASH` provided after registering your application in the `config.txt` file.
-4. Set values in `config.txt`:
+2. Select `API development tools` and fill out the form to register a new app.
+3. Save the values of `API_ID` and `API_HASH` in `config.txt`.
 
 ```dotenv
 API_ID=123
@@ -97,7 +96,7 @@ API_HASH=abc
 
 ## Installation
 
-You can download the [**repository**](https://github.com/dedkuzmich/NotPixelBot) by cloning it to your system and installing the necessary dependencies:
+Clone [**repository**](https://github.com/dedkuzmich/NotPixelBot)  and install the dependencies:
 
 ```shell
 git clone https://github.com/dedkuzmich/NotPixelBot.git
@@ -111,13 +110,14 @@ python main.py
 
 ## Usage
 
-When you first launch the bot, create a session for it using the `Creates a session` command. It will create a `sessions` folder in which all accounts will be stored, as well as a file `accounts.json`
+When you first launch the bot, create a session for it using the `2. Create session` command.
+It will create a `sessions` folder in which all accounts will be stored, as well as a file `accounts.json`
 with configurations.
 
-If you already have sessions, simply place them in a folder `sessions` and run the clicker. During the startup process you will be able to configure the use of a proxy for each
-session. User-Agent is created automatically for each account.
+If you already have sessions, simply place them in a folder `sessions` and run the `1. Run clicker`.
+During the startup process you can set a proxy for each session. User-Agent is created automatically.
 
-Here is an example of what `accounts.json` should look like:
+Example of `accounts.json`:
 
 ```shell
 [
@@ -135,4 +135,4 @@ This fork introduces several improvements:
 
 1. Migrated from `Pip` to `Poetry`.
 2. Simplified project structure.
-3. Implemented a header to mimic the English-language Telegram Desktop clients, specifically for use in the Portable version with `TDATA` auth.
+3. Implemented a header to mimic the English-language [Telegram Desktop](https://desktop.telegram.org/) clients, specifically for use in the Portable version with `TDATA` auth.
