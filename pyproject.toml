@@ -1,7 +1,7 @@
 [tool.poetry]
 package-mode = false
 name = "NotPixelBot"
-version = "0.1.0"
+version = "1.0.0"
 description = "Python bot for farming Not Pixel Telegram bot"
 authors = ["BlackJkee", "dedkuzmich"]
 readme = "README.md"
