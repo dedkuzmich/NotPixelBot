@@ -1,0 +1,26 @@
+[tool.poetry]
+package-mode = false
+name = "NotPixelBot"
+version = "0.1.0"
+description = "Python bot for farming Not Pixel Telegram bot"
+authors = ["BlackJkee", "dedkuzmich"]
+readme = "README.md"
+license = "Apache-2.0"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+aiohttp = "^3.10.8"
+aiohttp-proxy = "^0.1.2"
+better-proxy = "^1.2.0"
+loguru = "^0.7.2"
+pydantic-settings = "^2.5.2"
+pyrogram = "^2.0.106"
+setuptools = "^75.1.0"
+tgcrypto = [
+    { version = "^1.2.5", markers = "sys_platform != 'win32'" },
+    { path = "lib/whl/TgCrypto-1.2.5-cp312-cp312-win_amd64.whl", markers = "sys_platform == 'win32'" }
+]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

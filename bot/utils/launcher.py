@@ -26,12 +26,12 @@ Select an action:
 
 
 def get_proxy(raw_proxy: str) -> Proxy:
-    return Proxy.from_str(proxy=raw_proxy).as_url if raw_proxy else None
+    return Proxy.from_str(proxy = raw_proxy).as_url if raw_proxy else None
 
 
 async def process() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("-a", "--action", type=int, help="Action to perform")
+    parser.add_argument("-a", "--action", type = int, help = "Action to perform")
     action = parser.parse_args().action
 
     if not action:
@@ -52,16 +52,16 @@ async def process() -> None:
         await register_sessions()
     elif action == 1:
         accounts = await Accounts().get_accounts()
-        await run_tasks(accounts=accounts)
+        await run_tasks(accounts = accounts)
 
 
 async def run_tasks(accounts: [Any, Any, list]):
     tasks = []
     for account in accounts:
         session_name, user_agent, raw_proxy = account.values()
-        tg_client = await get_tg_client(session_name=session_name, proxy=raw_proxy)
-        proxy = get_proxy(raw_proxy=raw_proxy)
-        tasks.append(asyncio.create_task(run_tapper(tg_client=tg_client, user_agent=user_agent, proxy=proxy)))
-        await asyncio.sleep(delay=randint(settings.START_DELAY[0], settings.START_DELAY[1]))
+        tg_client = await get_tg_client(session_name = session_name, proxy = raw_proxy)
+        proxy = get_proxy(raw_proxy = raw_proxy)
+        tasks.append(asyncio.create_task(run_tapper(tg_client = tg_client, user_agent = user_agent, proxy = proxy)))
+        await asyncio.sleep(delay = randint(settings.START_DELAY[0], settings.START_DELAY[1]))
 
     await asyncio.gather(*tasks)

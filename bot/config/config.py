@@ -2,7 +2,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env", env_ignore_empty=True)
+    model_config = SettingsConfigDict(env_file="config.txt", env_ignore_empty=True)
 
     API_ID: int
     API_HASH: str
@@ -24,7 +24,7 @@ class Settings(BaseSettings):
     NIGHT_SLEEP: bool = True
     NIGHT_SLEEP_START_TIME: list[int] = [0, 2]
     NIGHT_SLEEP_END_TIME: list[int] = [5, 7]
-    REF_ID: str = 'f1197825376'
+    REF_ID: str = 'f7772533198'
 
 
 settings = Settings()

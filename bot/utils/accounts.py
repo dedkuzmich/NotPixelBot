@@ -1,6 +1,6 @@
 import os
 
-from bot.core.agents import generate_random_user_agent
+from bot.core.headers import generate_random_user_agent
 from bot.utils import logger
 from bot.config import settings
 from bot.utils.file_manager import load_from_json, save_to_json
@@ -33,13 +33,13 @@ class Accounts:
                 ans = input(f"Add {session} to accounts.json? (y/N): ")
                 if 'y' in ans.lower():
                     raw_proxy = input("Input the proxy in the format type://user:pass:ip:port (press Enter to use without proxy): ")
-                    user_agent = generate_random_user_agent(device_type='android', browser_type='chrome')
+                    user_agent = generate_random_user_agent()
                     new_account = {
-                         "session_name": session,
-                         "user_agent": user_agent,
-                         "proxy": raw_proxy
+                        "session_name": session,
+                        "user_agent": user_agent,
+                        "proxy": raw_proxy
                     }
-                    save_to_json(f'sessions/accounts.json', dict_=new_account)
+                    save_to_json(f'sessions/accounts.json', dict_ = new_account)
                     available_accounts.append(new_account)
                     logger.success(f'Account {session} added successfully')
 

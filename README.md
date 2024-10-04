@@ -1,131 +1,101 @@
-[![Static Badge](https://img.shields.io/badge/Telegram-Bot%20Link-Link?style=for-the-badge&logo=Telegram&logoColor=white&logoSize=auto&color=blue)](https://t.me/notpixel/app?startapp=f1197825376)
+[![Static Badge](https://img.shields.io/badge/Telegram-Bot%20Link-Link?style=for-the-badge&logo=Telegram&logoColor=white&logoSize=auto&color=blue)](https://t.me/notpixel/app?startapp=f7772533198)
 
-#  AUTO FARM FOR NotPixel 🚀
+# AUTO FARM FOR NotPixel 🚀
+
 ![start-notpx](https://github.com/user-attachments/assets/5dbba427-4bd6-4a51-8dd2-458d215523af)
 
-# 🔥🔥 Use PYTHON 3.10 🔥🔥
+## Features
 
-> 🇷 🇺 README in russian available [here](README-RU.md)
-
-## Features  
 | Feature                               | Supported |
 |---------------------------------------|:---------:|
-| Multithreading                        |     ✔️     |
-| Proxy binding to session              |     ✔️     |
-| User-Agent binding to session         |     ✔️     |
-| Support for tdata / pyrogram .session |     ✔️     |
-| Registration in bot                   |     ✔️     |
-| Auto-paint                            |     ✔️     |
-| Auto-tasks                            |     ✔️     |
-| Auto-claim mining rewards             |     ✔️     |
-| Auto-upgrade boosters                 |     ✔️     |
-| Night sleep mode                      |     ✔️     |
-| Analytics game events                 |     ✔️     |
+| Multithreading                        |    ✔️     |
+| Proxy binding to session              |    ✔️     |
+| User-Agent binding to session         |    ✔️     |
+| Support for tdata / pyrogram .session |    ✔️     |
+| Registration in bot                   |    ✔️     |
+| Auto-paint                            |    ✔️     |
+| Auto-tasks                            |    ✔️     |
+| Auto-claim mining rewards             |    ✔️     |
+| Auto-upgrade boosters                 |    ✔️     |
+| Night sleep mode                      |    ✔️     |
+| Analytics game events                 |    ✔️     |
 
+## [Settings](https://github.com/dedkuzmich/NotPixelBot/blob/master/example_config.txt/)
 
+> :warning: **Warning:** Device type and country-specific headers can be changed under comment `# GLOBAL SETTINGS` in `bot/core/headers.py`.
 
-
-## [Settings](https://github.com/Desamod/NotPixelBot/blob/master/.env-example/)
-| Settings                   |                                 Description                                 |
-|----------------------------|:---------------------------------------------------------------------------:|
-| **API_ID / API_HASH**      | Platform data from which to run the Telegram session (by default - android) |
-| **SLEEP_TIME**             |            Sleep time between cycles (by default - [3000, 8000])            |
-| **START_DELAY**            |           Delay between sessions at start (by default - [5, 60])            |
-| **AUTO_PAINT**             |                      Auto painting (by default - True)                      |
-| **AUTO_UPGRADE**           |                  Auto upgrade boosters (by default - True)                  |
-| **AUTO_MINING**            |                Auto claim mining reward (by default - True)                 |
-| **AUTO_TASK**              |                       Auto tasks (by default - True)                        |
-| **AUTO_UPGRADE_PAINT**     |                Auto upgrade paint reward (by default - True)                |
-| **MAX_PAINT_LEVEL**        |                Max level for paint booster (by default - 5)                 |
-| **AUTO_UPGRADE_CHARGE**    |               Auto upgrade recharge speed (by default - True)               |
-| **MAX_CHARGE_LEVEL**       |               Max level for recharge booster (by default - 5)               |
-| **AUTO_UPGRADE_ENERGY**    |                Auto upgrade energy limit (by default - True)                |
-| **MAX_ENERGY_LEVEL**       |                Max level for energy booster (by default - 2)                |
-| **USE_RANDOM_COLOR**       |               Use random color from game (by default - True)                |
-| **OWN_COLOR**              |        Own color if USE_RANDOM_COLOR is False (by default - #FFFFFF)        |
-| **NIGHT_SLEEP**            |                  Extra sleep at night (by default - True)                   |
-| **NIGHT_SLEEP_START_TIME** |          Time (hour) when Night mode starts (by default - [0, 2])           |
-| **NIGHT_SLEEP_END_TIME**   |           Time (hour) when Night mode ends (by default - [5, 7])            |
-| **REF_ID**                 |                          Ref link for registration                          |
-
-
-## Quick Start 📚
-
-To fast install libraries and run bot - open `run.bat` on **Windows** or `run.sh` on **Linux**
+| Settings                   |                           Description                            |
+|----------------------------|:----------------------------------------------------------------:|
+| **API_ID / API_HASH**      |       Platform data from which to run the Telegram session       |
+| **SLEEP_TIME**             |    Delay (seconds) between cycles (by default - [3000, 8000])    |
+| **START_DELAY**            | Delay (seconds) between sessions at start (by default - [5, 60]) |
+| **AUTO_PAINT**             |                Auto painting (by default - True)                 |
+| **AUTO_UPGRADE**           |            Auto upgrade boosters (by default - True)             |
+| **AUTO_MINING**            |           Auto claim mining reward (by default - True)           |
+| **AUTO_TASK**              |                  Auto tasks (by default - True)                  |
+| **AUTO_UPGRADE_PAINT**     |          Auto upgrade paint reward (by default - True)           |
+| **MAX_PAINT_LEVEL**        |           Max level for paint booster (by default - 7)           |
+| **AUTO_UPGRADE_CHARGE**    |         Auto upgrade recharge speed (by default - True)          |
+| **MAX_CHARGE_LEVEL**       |         Max level for recharge booster (by default - 4)          |
+| **AUTO_UPGRADE_ENERGY**    |          Auto upgrade energy limit (by default - True)           |
+| **MAX_ENERGY_LEVEL**       |          Max level for energy booster (by default - 3)           |
+| **USE_RANDOM_COLOR**       |          Use random color from game (by default - True)          |
+| **OWN_COLOR**              |  Own color if USE_RANDOM_COLOR is False (by default - #FFFFFF)   |
+| **NIGHT_SLEEP**            |             Extra sleep at night (by default - True)             |
+| **NIGHT_SLEEP_START_TIME** |     Time (hour) when Night mode starts (by default - [0, 2])     |
+| **NIGHT_SLEEP_END_TIME**   |      Time (hour) when Night mode ends (by default - [5, 7])      |
+| **REF_ID**                 |                  Reference ID for registration                   |
 
 ## Prerequisites
-Before you begin, make sure you have the following installed:
-- [**Python**](https://www.python.org/downloads/release/python-3100/) **version 3.10**
 
-## Obtaining API Keys
+**Tested on Python 3.12.7**
+
+Before you begin, make sure you have the following installed:
+
+- Python [3.12](https://www.python.org/downloads/release/python-3120/) or [latest](https://www.python.org/downloads/)
+- [Poetry](https://python-poetry.org/docs/#installing-with-the-official-installer) & [Pip](https://pip.pypa.io/en/stable/installation/) for Python 3.12
+- Build-essentials and python3.12-dev packages on Linux:
+
+```shell
+sudo apt install build-essential python3.12-dev- 
+```
+
+## Obtaining and setting API Keys
+
 1. Go to [**my.telegram.org**](https://my.telegram.org/auth) and log in using your phone number.
 2. Select `API development tools` and fill out the form to register a new application.
-3. Record the `API_ID` and `API_HASH` provided after registering your application in the `.env` file.
+3. Record the `API_ID` and `API_HASH` provided after registering your application in the `config.txt` file.
+4. Set values in `config.txt`:
+
+```dotenv
+API_ID=123
+API_HASH=abc
+```
 
 ## Installation
-You can download the [**repository**](https://github.com/BlackJkee/NotPixelBot) by cloning it to your system and installing the necessary dependencies:
+
+You can download the [**repository**](https://github.com/dedkuzmich/NotPixelBot) by cloning it to your system and installing the necessary dependencies:
+
 ```shell
-git clone https://github.com/BlackJkee/NotPixelBot.git
+git clone https://github.com/dedkuzmich/NotPixelBot.git
 cd NotPixelBot
-```
-
-Then you can do automatic installation by typing:
-
-Windows:
-```shell
-run.bat
-```
-
-Linux:
-```shell
-run.sh
-```
-
-# Linux manual installation
-```shell
-python3 -m venv venv
-source venv/bin/activate
-pip3 install -r requirements.txt
-cp .env-example .env
-nano .env  # Here you must specify your API_ID and API_HASH, the rest is taken by default
-python3 main.py
-```
-
-You can also use arguments for quick start, for example:
-```shell
-~/NotPixelBot >>> python3 main.py --action (1/2)
-# Or
-~/NotPixelBot >>> python3 main.py -a (1/2)
-
-# 1 - Run clicker
-# 2 - Creates a session
-```
-
-# Windows manual installation
-```shell
-python -m venv venv
-venv\Scripts\activate
-pip install -r requirements.txt
-copy .env-example .env
-# Here you must specify your API_ID and API_HASH, the rest is taken by default
+cp example_config.txt config.txt
+notepad/nano config.txt  # Here you set API_ID and API_HASH
+poetry shell
+poetry install
 python main.py
 ```
-You can also use arguments for quick start, for example:
-```shell
-~/NotPixelBot >>> python main.py --action (1/2)
-# Or
-~/NotPixelBot >>> python main.py -a (1/2)
 
-# 1 - Run clicker
-# 2 - Creates a session
-```
+## Usages
 
-### Usages
-When you first launch the bot, create a session for it using the `Creates a session` command. It will create a `sessions` folder in which all accounts will be stored, as well as a file `accounts.json` with configurations.
-If you already have sessions, simply place them in a folder `sessions` and run the clicker. During the startup process you will be able to configure the use of a proxy for each session.
-User-Agent is created automatically for each account.
+When you first launch the bot, create a session for it using the `Creates a session` command. It will create a `sessions` folder in which all accounts will be stored, as well as a file `accounts.json`
+with configurations.
+
+If you already have sessions, simply place them in a folder `sessions` and run the clicker. During the startup process you will be able to configure the use of a proxy for each
+session. User-Agent is created automatically for each account.
 
 Here is an example of what `accounts.json` should look like:
+
 ```shell
 [
   {
@@ -136,5 +106,10 @@ Here is an example of what `accounts.json` should look like:
 ]
 ```
 
+## Changes Compared to the [Original Project](https://github.com/BlackJkee/NotPixelBot)
 
+This fork introduces several improvements:
 
+1. Migrated from pip to Poetry.
+2. Simplified project structure.
+3. Implemented a header to mimic the English-language Telegram Desktop clients, specifically for use in the Portable version with TDATA auth.
