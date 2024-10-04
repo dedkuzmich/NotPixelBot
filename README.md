@@ -54,10 +54,10 @@ Before you begin, make sure you have the following installed:
 
 - Python [3.12](https://www.python.org/downloads/release/python-3120/) or [latest](https://www.python.org/downloads/)
 - [Poetry](https://python-poetry.org/docs/#installing-with-the-official-installer) & [Pip](https://pip.pypa.io/en/stable/installation/) for Python 3.12
-- Build-essentials and python3.12-dev packages on Linux:
+- Build packages on Linux:
 
 ```shell
-sudo apt install build-essential python3.12-dev- 
+sudo apt install build-essential python3.12-dev
 ```
 
 ## Obtaining and setting API Keys
@@ -86,7 +86,7 @@ poetry install
 python main.py
 ```
 
-## Usages
+## Usage
 
 When you first launch the bot, create a session for it using the `Creates a session` command. It will create a `sessions` folder in which all accounts will be stored, as well as a file `accounts.json`
 with configurations.
