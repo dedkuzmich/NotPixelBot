@@ -53,8 +53,31 @@
 Before you begin, make sure you have the following installed:
 
 - Python [3.12](https://www.python.org/downloads/release/python-3120/) or [latest](https://www.python.org/downloads/)
-- [Poetry](https://python-poetry.org/docs/#installing-with-the-official-installer) & [Pip](https://pip.pypa.io/en/stable/installation/) for Python 3.12
-- Build packages on Linux:
+- [Pip](https://pip.pypa.io/en/stable/installation/) & [Poetry](https://python-poetry.org/docs/#installing-with-the-official-installer) for Python 3.12
+- Dev packages (Linux only).
+
+### Quick setup on Linux:
+
+Install Python 3.12:
+
+```shell
+sudo apt install software-properties-common -y
+sudo add-apt-repository ppa:deadsnakes/ppa
+sudo apt update && sudo apt install python3.12
+```
+
+Install pip & poetry:
+
+```shell
+curl -sS https://bootstrap.pypa.io/get-pip.py | python3.12
+curl -sSL https://install.python-poetry.org | python3.12 -
+nano ~/.bashrc
+    # Add the following line to the end of "~/.bashrc"
+    export PATH="$HOME/.local/bin:$PATH"
+source ~/.bashrc
+```
+
+Install dev packages:
 
 ```shell
 sudo apt install build-essential python3.12-dev
@@ -110,6 +133,6 @@ Here is an example of what `accounts.json` should look like:
 
 This fork introduces several improvements:
 
-1. Migrated from pip to Poetry.
+1. Migrated from `Pip` to `Poetry`.
 2. Simplified project structure.
-3. Implemented a header to mimic the English-language Telegram Desktop clients, specifically for use in the Portable version with TDATA auth.
+3. Implemented a header to mimic the English-language Telegram Desktop clients, specifically for use in the Portable version with `TDATA` auth.
