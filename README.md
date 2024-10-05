@@ -61,39 +61,36 @@ Before you begin, make sure you have the following installed:
 - [Pip](https://pip.pypa.io/en/stable/installation/) & [Poetry](https://python-poetry.org/docs/#installing-with-the-official-installer) for Python 3.12
 - Dev packages (Linux only).
 
-### Quick setup on Linux:
+### Quick setup on Ubuntu 22.04 x64:
 
 <details>
 <summary>Expand</summary>
 
-Install Python 3.12:
+Install `Pyenv`:
 
 ```shell
-sudo apt install software-properties-common -y
-sudo add-apt-repository ppa:deadsnakes/ppa
-sudo apt update && sudo apt install python3.12
+curl https://pyenv.run | bash
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc && echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc && echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc && echo 'eval "$(pyenv init -)"' >> ~/.bashrc && echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.profile && echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.profile && echo 'eval "$(pyenv init -)"' >> ~/.profile && source ~/.bashrc
+sudo apt install -y make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python3-openssl git
 ```
 
-Install Pip & Poetry:
+Install `Python 3.12` (`Pip` is built-in):
 
 ```shell
-curl -sS https://bootstrap.pypa.io/get-pip.py | python3.12
-curl -sSL https://install.python-poetry.org | python3.12 -
-nano ~/.bashrc
-    # Add the following line to the end of "~/.bashrc"
-    export PATH="$HOME/.local/bin:$PATH"
-source ~/.bashrc
+pyenv install 3.12 # Process takes ~5 min on AWS t3.micro
+pyenv global 3.12.7
 ```
 
-Install dev packages:
+Install `Poetry`:
 
 ```shell
-sudo apt install build-essential python3.12-dev
+curl -sSL https://install.python-poetry.org | python3 -
+poetry config virtualenvs.prefer-active-python true
 ```
 
 </details>
 
-## Obtaining and setting API Keys
+## Obtaining API Keys
 
 1. Go to [**my.telegram.org**](https://my.telegram.org/auth) and log in using your phone number.
 2. Select `API development tools` and fill out the form to register a new app.
@@ -109,8 +106,7 @@ API_HASH=abc
 Clone [**repository**](https://github.com/dedkuzmich/NotPixelBot)  and install the dependencies:
 
 ```shell
-git clone https://github.com/dedkuzmich/NotPixelBot.git
-cd NotPixelBot
+git clone https://github.com/dedkuzmich/NotPixelBot.git && cd NotPixelBot
 cp example_config.txt config.txt
 notepad/nano config.txt  # Here you set API_ID and API_HASH
 poetry shell
