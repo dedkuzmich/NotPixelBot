@@ -8,7 +8,7 @@ from typing import Any
 from urllib.parse import unquote, quote, parse_qs
 
 import aiohttp
-from aiohttp_proxy import ProxyConnector
+from aiohttp_socks import ProxyConnector
 from better_proxy import Proxy
 from pyrogram import Client
 from pyrogram.errors import Unauthorized, UserDeactivated, AuthKeyUnregistered
@@ -199,8 +199,9 @@ class Tapper:
 
     async def check_proxy(self, http_client: aiohttp.ClientSession, proxy: Proxy) -> None:
         try:
-            response = await http_client.get(url = 'https://ipinfo.io/ip', timeout = aiohttp.ClientTimeout(10))
-            ip = (await response.text())
+            timeout = aiohttp.ClientTimeout(total = 10)
+            response = await http_client.get(url = 'https://ipinfo.io/ip', timeout = timeout)
+            ip = await response.text()
             logger.info(f"<blue>{self.session_name}</blue> | Proxy IP: <green>{ip}</green>")
         except Exception as error:
             logger.error(f"<blue>{self.session_name}</blue> | Proxy: <red>{proxy}</red> | Error: 😢 <red>{error}</red>")

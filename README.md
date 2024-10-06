@@ -71,7 +71,7 @@ Install `Pyenv`:
 ```shell
 curl https://pyenv.run | bash
 echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc && echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc && echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc && echo 'eval "$(pyenv init -)"' >> ~/.bashrc && echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.profile && echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.profile && echo 'eval "$(pyenv init -)"' >> ~/.profile && source ~/.bashrc
-sudo apt install -y make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python3-openssl git
+sudo apt install -y make build-essential screen libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python3-openssl git
 ```
 
 Install `Python 3.12` (`Pip` is built-in):
@@ -111,7 +111,8 @@ cp example_config.txt config.txt
 notepad/nano config.txt  # Here you set API_ID and API_HASH
 poetry shell
 poetry install
-python main.py
+python main.py # Test run
+deactivate
 ```
 
 ## Usage
@@ -121,16 +122,44 @@ It will create a `sessions` folder in which all accounts will be stored, as well
 with configurations.
 
 If you already have sessions, simply place them in a folder `sessions` and run the `1. Run clicker`.
-During the startup process you can set a proxy for each session. User-Agent is created automatically.
+During the startup process you can set a proxy for each session (`HTTP`, `SOCKS4`, `SOCKS5` proxy protocols are supported).
+
+### Linux only
+
+Linux allow you to work with sessions via `screen`.
+Create & detach a session:
+
+```shell
+screen -S npx_session
+source $(poetry env info --path)/bin/activate
+python main.py
+# Detach session with Ctrl + A + D
+```
+
+Attach to the session:
+
+```shell
+screen -ls
+screen -r npx_session
+deactivate
+exit # If you want to kill session completely
+```
+
+## Examples
 
 Example of `accounts.json`:
 
 ```shell
 [
-  {
-    "session_name": "name_example",
-    "user_agent": "Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.6422.165 Mobile Safari/537.36",
+  { # Pattern
+    "session_name": "name_example_1",
+    "user_agent": "Randomly generated User-Agent",
     "proxy": "type://user:pass:ip:port"  # "proxy": "" - if you dont use proxy
+  }
+  { # Realistic example
+    "session_name": "session_2",
+    "user_agent": "Mozilla/5.0 (Linux; Android 13) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.5821.163 Mobile Safari/537.36",
+    "proxy": "socks5://lamer:hacker:13.37.13.37:1337"
   }
 ]
 ```
