@@ -130,6 +130,7 @@ Linux allow you to work with sessions via `screen`.
 Create & detach a session:
 
 ```shell
+deactivate # Ensure you are outside poetry venv
 screen -S npx_session
 source $(poetry env info --path)/bin/activate
 python main.py
