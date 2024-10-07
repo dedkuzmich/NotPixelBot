@@ -25,31 +25,33 @@
 
 </details>
 
-## [Settings](https://github.com/dedkuzmich/NotPixelBot/blob/master/example_config.txt/)
+## [Settings](https://github.com/dedkuzmich/NotPixelBot/blob/master/example_config.txt)
 
 > :warning: **Warning:** Device type and country-specific headers can be changed under comment `# GLOBAL SETTINGS` in `bot/core/headers.py`.
 
-| Settings                   |                           Description                            |
-|----------------------------|:----------------------------------------------------------------:|
-| **API_ID / API_HASH**      |       Platform data from which to run the Telegram session       |
-| **SLEEP_TIME**             |    Delay (seconds) between cycles (by default - [3000, 8000])    |
-| **START_DELAY**            | Delay (seconds) between sessions at start (by default - [5, 60]) |
-| **AUTO_PAINT**             |                Auto painting (by default - True)                 |
-| **AUTO_UPGRADE**           |            Auto upgrade boosters (by default - True)             |
-| **AUTO_MINING**            |           Auto claim mining reward (by default - True)           |
-| **AUTO_TASK**              |                  Auto tasks (by default - True)                  |
-| **AUTO_UPGRADE_PAINT**     |          Auto upgrade paint reward (by default - True)           |
-| **MAX_PAINT_LEVEL**        |           Max level for paint booster (by default - 7)           |
-| **AUTO_UPGRADE_CHARGE**    |         Auto upgrade recharge speed (by default - True)          |
-| **MAX_CHARGE_LEVEL**       |         Max level for recharge booster (by default - 4)          |
-| **AUTO_UPGRADE_ENERGY**    |          Auto upgrade energy limit (by default - True)           |
-| **MAX_ENERGY_LEVEL**       |          Max level for energy booster (by default - 3)           |
-| **USE_RANDOM_COLOR**       |          Use random color from game (by default - True)          |
-| **OWN_COLOR**              |  Own color if USE_RANDOM_COLOR is False (by default - #FFFFFF)   |
-| **NIGHT_SLEEP**            |             Extra sleep at night (by default - True)             |
-| **NIGHT_SLEEP_START_TIME** |     Time (hour) when Night mode starts (by default - [0, 2])     |
-| **NIGHT_SLEEP_END_TIME**   |      Time (hour) when Night mode ends (by default - [5, 7])      |
-| **REF_ID**                 |                  Reference ID for registration                   |
+| Settings                   |                            Description                            |
+|----------------------------|:-----------------------------------------------------------------:|
+| **API_ID / API_HASH**      |       Platform data from which to run the Telegram session        |
+| **SLEEP_TIME**             |    Delay (seconds) between cycles (by default - [1200, 1800])     |
+| **START_DELAY**            | Delay (seconds) between sessions at start (by default - [5, 30])  |
+| **AUTO_PAINT**             |                 Auto painting (by default - True)                 |
+| **AUTO_MINING**            |           Auto claim mining reward (by default - True)            |
+| **X3_POINTS**              |      Auto paint specific pixel to get 3x px (default - True)      |
+| **COLOR_MAP_FILE**         | URL to JSON color map (default - URL to `maps/color_map_x3.json`) |
+| **AUTO_TASK**              |                  Auto tasks (by default - True)                   |
+| **AUTO_UPGRADE**           |             Auto upgrade boosters (by default - True)             |
+| **AUTO_UPGRADE_PAINT**     |           Auto upgrade paint reward (by default - True)           |
+| **AUTO_UPGRADE_RECHARGE**  |          Auto upgrade recharge speed (by default - True)          |
+| **AUTO_UPGRADE_ENERGY**    |           Auto upgrade energy limit (by default - True)           |
+| **MAX_PAINT_LEVEL**        |           Max level for paint booster (by default - 7)            |
+| **MAX_RECHARGE_LEVEL**     |          Max level for recharge booster (by default - 4)          |
+| **MAX_ENERGY_LEVEL**       |           Max level for energy booster (by default - 3)           |
+| **USE_RANDOM_COLOR**       |          Use random color from game (by default - True)           |
+| **OWN_COLOR**              |   Own color if USE_RANDOM_COLOR is False (by default - #FFFFFF)   |
+| **NIGHT_SLEEP**            |             Extra sleep at night (by default - True)              |
+| **NIGHT_SLEEP_START_TIME** |     Time (hour) when Night mode starts (by default - [0, 2])      |
+| **NIGHT_SLEEP_END_TIME**   |      Time (hour) when Night mode ends (by default - [4, 6])       |
+| **REF_ID**                 |                   Reference ID for registration                   |
 
 ## Prerequisites
 
@@ -124,6 +126,9 @@ with configurations.
 If you already have sessions, simply place them in a folder `sessions` and run the `1. Run clicker`.
 During the startup process you can set a proxy for each session (`HTTP`, `SOCKS4`, `SOCKS5` proxy protocols are supported).
 
+Colored [map](https://github.com/dedkuzmich/NotPixelBot/blob/master/maps/color_map_x3) for 3x PX bonus
+is updated daily with the latest values from [this](https://github.com/vanhbakaa/notpixel-3x-points) repo.
+
 ### Linux only
 
 Linux allow you to work with sessions via `screen`.
@@ -172,3 +177,4 @@ This fork introduces several improvements:
 1. Migrated from `Pip` to `Poetry`.
 2. Simplified project structure.
 3. Implemented a header to mimic the English-language [Telegram Desktop](https://desktop.telegram.org/) clients, specifically for use in the Portable version with `TDATA` auth.
+4. Implemented auto painting with a [3x PX bonus](https://github.com/vanhbakaa/Notpixel-bot) for special areas.

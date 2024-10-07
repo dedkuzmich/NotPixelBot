@@ -11,7 +11,7 @@ import aiohttp
 from aiohttp_socks import ProxyConnector
 from better_proxy import Proxy
 from pyrogram import Client
-from pyrogram.errors import Unauthorized, UserDeactivated, AuthKeyUnregistered
+from pyrogram.errors import Unauthorized, UserDeactivated, AuthKeyUnregistered, UserNotParticipant
 from pyrogram.raw import types
 from pyrogram.raw.functions.messages import RequestAppWebView
 from bot.config import settings
@@ -24,6 +24,22 @@ from random import randint, choices
 
 from ..utils.analytics_event_content import content_data
 from ..utils.game_config import League, TASKS, UPGRADE_CHARGE_LIMIT, UPGRADE_RECHARGE_SPEED, UPGRADE_REPAINT, COLORS
+
+
+def calc_id(x: int, y: int, x1: int, y1: int):
+    px_id = randint(min(y, y1), max(y1, y)) * 1000
+    px_id += randint(min(x, x1), max(x1, x)) + 1
+    return px_id
+
+
+def generate_random_color(exclude_rgb = ""):
+    while True:
+        r = random.randint(0, 255)
+        g = random.randint(0, 255)
+        b = random.randint(0, 255)
+        rgb = "#{:02X}{:02X}{:02X}".format(r, g, b)
+        if rgb != exclude_rgb:
+            return rgb
 
 
 class Tapper:
@@ -143,7 +159,8 @@ class Tapper:
                 logger.error(f"<blue>{self.session_name}</blue> | Unknown error when logging: 😢 <red>{error}</red>")
                 await asyncio.sleep(delay = randint(3, 7))
 
-    def generate_random_string(self, length = 8):
+    @staticmethod
+    def generate_random_string(length = 8):
         characters = 'abcdef0123456789'
         random_string = ''
         for _ in range(length):
@@ -197,7 +214,7 @@ class Tapper:
             logger.error(f"<blue>{self.session_name}</blue> | Unknown error sending game event: 😢 <red>{error}</red>")
             await asyncio.sleep(delay = randint(3, 7))
 
-    async def check_proxy(self, http_client: aiohttp.ClientSession, proxy: Proxy) -> None:
+    async def check_proxy(self, http_client: aiohttp.ClientSession, proxy: str) -> None:
         try:
             timeout = aiohttp.ClientTimeout(total = 10)
             response = await http_client.get(url = 'https://ipinfo.io/ip', timeout = timeout)
@@ -219,14 +236,13 @@ class Tapper:
             logger.info(f"<blue>{self.session_name}</blue> | Get channel: <y>{chat.title}</y>")
             try:
                 await self.tg_client.get_chat_member(chat.id, "me")
+            except UserNotParticipant:
+                logger.info(f"<blue>{self.session_name}</blue> | User not participant of the TG group: <y>{chat.title}</y>")
+                await asyncio.sleep(delay = 3)
+                response = await self.tg_client.join_chat(parsed_link)
+                logger.info(f"<blue>{self.session_name}</blue> | Joined to channel: <y>{response.title}</y>")
             except Exception as error:
-                if error.ID == 'USER_NOT_PARTICIPANT':
-                    logger.info(f"<blue>{self.session_name}</blue> | User not participant of the TG group: <y>{chat.title}</y>")
-                    await asyncio.sleep(delay = 3)
-                    response = await self.tg_client.join_chat(parsed_link)
-                    logger.info(f"<blue>{self.session_name}</blue> | Joined to channel: <y>{response.title}</y>")
-                else:
-                    logger.error(f"<blue>{self.session_name}</blue> | Error while checking TG group: <y>{chat.title}</y>")
+                logger.error(f"<blue>{self.session_name}</blue> | Error while checking TG group: <y>{chat.title}</y>")
 
             if self.tg_client.is_connected:
                 await self.tg_client.disconnect()
@@ -348,24 +364,6 @@ class Tapper:
             logger.error(f"<blue>{self.session_name}</blue> | Unknown error while processing tasks | Error: {e}")
             await asyncio.sleep(delay = 3)
 
-    async def paint_pixel(self, http_client: aiohttp.ClientSession):
-        try:
-            pixel_id = randint(1, 1000000)
-            color = settings.OWN_COLOR if not settings.USE_RANDOM_COLOR else random.choice(COLORS)
-            payload = {
-                "pixelId": pixel_id,
-                "newColor": color
-            }
-            response = await http_client.post('https://notpx.app/api/v1/repaint/start', json = payload)
-            response.raise_for_status()
-            logger.success(f"<blue>{self.session_name}</blue> | Pixel <fg #ffbcd9>{pixel_id}</fg #ffbcd9> successfully painted | "
-                           f"Color: <fg {color}>▇</fg {color}>")
-            await asyncio.sleep(delay = randint(5, 10))
-
-        except Exception as error:
-            logger.error(f"<blue>{self.session_name}</blue> | Unknown error while painting: 😢 <red>{error}</red>")
-            await asyncio.sleep(delay = 3)
-
     def can_buy_upgrade(self, upgrade: list[dict[str, Any]], level: int) -> bool:
         for item in upgrade:
             if item['level'] == level and item['price'] <= self.mining_data.get('userBalance'):
@@ -398,6 +396,64 @@ class Tapper:
             logger.error(f"<blue>{self.session_name}</blue> | Unknown error when getting mining reward: 😢 <red>{error}</red>")
             await asyncio.sleep(delay = 3)
 
+    # PAINTER
+    async def get_data_x3(self, http_client: aiohttp.ClientSession) -> list:
+        data = []
+        try:
+            response = await http_client.get(settings.COLOR_MAP_FILE)
+            response.raise_for_status()
+            try:
+                text = await response.text()
+                color_map = json.loads(text)
+                data = random.choice(color_map["data"])
+                color = data["color"]
+                cord = random.choice(data["cordinates"])
+                px_id = calc_id(cord["start"][0], cord["start"][1], cord["end"][0], cord["end"][1])
+                data = [px_id, color]
+            except Exception as error:
+                logger.error(f"<blue>{self.session_name}</blue> | Map parsing error: <red>{error}</red>")
+        except Exception as error:
+            logger.error(f"<blue>{self.session_name}</blue> | Unable to download: <red>{error}</red>")
+        return data
+
+    async def send_repaint_request(self, http_client: aiohttp.ClientSession, payload, charges_left = None) -> bool:
+        result = False
+        try:
+            response = await http_client.post("https://notpx.app/api/v1/repaint/start", json = payload, headers = headers)
+            response.raise_for_status()
+            res_json = await response.json()
+            balance = int(res_json['balance'])
+            msg = f"<blue>{self.session_name}</blue> | Painted <cyan>{payload['pixelId']}</cyan>, color <cyan>{payload['newColor']}</cyan> | Balance: <blue>{balance}</blue>"
+            if charges_left:
+                msg += f" | Charges left: <yellow>{charges_left}</yellow>"
+            logger.success(msg)
+            result = True
+        except Exception as error:
+            logger.error(f"<blue>{self.session_name}</blue> | Unable to paint {payload['pixelId']}: <red>{error}</red>")
+        return result
+
+    async def paint_px(self, http_client: aiohttp.ClientSession, charges_left) -> bool:
+        px_id = randint(1, 1000000)
+        color = settings.OWN_COLOR if not settings.USE_RANDOM_COLOR else random.choice(COLORS)
+        payload = {
+            "pixelId": px_id,
+            "newColor": color
+        }
+        result = await self.send_repaint_request(http_client, payload, charges_left)
+        return result
+
+    async def paint_px_x3(self, http_client: aiohttp.ClientSession, charges_left, idx, data) -> bool:
+        px_id, color = data
+        if idx % 2 != 0:  # If repainting the default color to non default
+            color = generate_random_color(exclude_rgb = color)  # Generate non default color
+        payload = {
+            "pixelId": px_id,
+            "newColor": color
+        }
+        result = await self.send_repaint_request(http_client, payload, charges_left)
+        return result
+
+    # MAIN
     async def run(self, user_agent: str, proxy: str | None) -> None:
         self.proxy = proxy
         access_token_created_time = 0
@@ -460,7 +516,7 @@ class Tapper:
                             if settings.AUTO_UPGRADE_ENERGY and energy < settings.MAX_ENERGY_LEVEL:
                                 if self.can_buy_upgrade(upgrade = UPGRADE_CHARGE_LIMIT, level = energy + 1):
                                     boosters.append('energyLimit')
-                            if settings.AUTO_UPGRADE_RECHARGE_SPEED and recharge < settings.MAX_RECHARGE_LEVEL:
+                            if settings.AUTO_UPGRADE_RECHARGE and recharge < settings.MAX_RECHARGE_LEVEL:
                                 if self.can_buy_upgrade(upgrade = UPGRADE_RECHARGE_SPEED, level = recharge + 1):
                                     boosters.append('reChargeSpeed')
                             if settings.AUTO_UPGRADE_PAINT and paint < settings.MAX_PAINT_LEVEL:
@@ -478,14 +534,20 @@ class Tapper:
                                 result = await self.claim_mining_reward(http_client = http_client)
                                 if result:
                                     logger.success(f"<blue>{self.session_name}</blue> | Got mining reward: <e>{result}</e> PX")
-                                await asyncio.sleep(delay = (randint(5, 15)))
+                                await asyncio.sleep(delay = (randint(5, 10)))
 
                         if settings.AUTO_PAINT:
-                            charges = mining_data['charges']
+                            charges = int(mining_data["charges"])
+                            data_x3 = await self.get_data_x3(http_client)
+                            idx = 0
                             while charges > 0:
-                                await asyncio.sleep(delay = randint(1, 30))
-                                await self.paint_pixel(http_client = http_client)
                                 charges -= 1
+                                idx += 1
+                                if settings.X3_POINTS and data_x3:
+                                    result = await self.paint_px_x3(http_client, charges, idx, data_x3)
+                                else:
+                                    result = await self.paint_px(http_client, charges)
+                                await asyncio.sleep(delay = randint(1, 3))
 
                     logger.info(f"<blue>{self.session_name}</blue> | Sleep 💤 <y>{round(sleep_time / 60, 1)}</y> min")
                     await asyncio.sleep(delay = sleep_time)
