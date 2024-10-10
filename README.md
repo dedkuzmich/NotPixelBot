@@ -126,7 +126,7 @@ with configurations.
 If you already have sessions, simply place them in a folder `sessions` and run the `1. Run clicker`.
 During the startup process you can set a proxy for each session (`HTTP`, `SOCKS4`, `SOCKS5` proxy protocols are supported).
 
-Colored [map](https://github.com/dedkuzmich/NotPixelBot/blob/master/maps/color_map_x3) for 3x PX bonus
+JSON color [map](https://github.com/dedkuzmich/NotPixelBot/blob/master/maps/color_map_x3.json) for 3x PX bonus
 is updated daily with the latest values from [this](https://github.com/vanhbakaa/notpixel-3x-points) repo.
 
 ### Linux only
