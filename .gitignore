@@ -2,6 +2,7 @@
 config.txt
 sessions/
 logs/
+dev/
 
 
 # Byte-compiled / optimized / DLL files
