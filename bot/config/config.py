@@ -7,30 +7,28 @@ class Settings(BaseSettings):
     API_ID: int
     API_HASH: str
 
-    SLEEP_TIME: list[int] = [1200, 1800]
-    START_DELAY: list[int] = [5, 20]
+    SLEEP_TIME: list[int] = [3600, 5000]
+    START_DELAY: list[int] = [5, 30]
+    X3_POINTS: bool = True
     AUTO_PAINT: bool = True
     AUTO_MINING: bool = True
-
-    X3_POINTS: bool = True
-    COLOR_MAP_FILE: str = "https://raw.githubusercontent.com/dedkuzmich/NotPixelBot/refs/heads/master/color_map_x3.json"
-
-    AUTO_TASK: bool = True
     AUTO_UPGRADE: bool = True
 
     AUTO_UPGRADE_PAINT: bool = True
     AUTO_UPGRADE_RECHARGE: bool = True
     AUTO_UPGRADE_ENERGY: bool = True
     MAX_PAINT_LEVEL: int = 7
-    MAX_RECHARGE_LEVEL: int = 4
-    MAX_ENERGY_LEVEL: int = 3
-
-    USE_RANDOM_COLOR: bool = True
-    OWN_COLOR: str = "#FFFFFF"
+    MAX_RECHARGE_LEVEL: int = 11
+    MAX_ENERGY_LEVEL: int = 6
 
     NIGHT_SLEEP: bool = True
     NIGHT_SLEEP_START_TIME: list[int] = [0, 2]
     NIGHT_SLEEP_END_TIME: list[int] = [4, 6]
+
+    # Legacy
+    AUTO_TASK: bool = False
+    USE_RANDOM_COLOR: bool = True
+    OWN_COLOR: str = "#FFFFFF"
     REF_ID: str = "f7772533198_s573984"
 
 

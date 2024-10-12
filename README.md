@@ -2,7 +2,13 @@
 
 # AUTO FARM FOR NotPixel 🚀
 
-![start-notpx](https://github.com/user-attachments/assets/5dbba427-4bd6-4a51-8dd2-458d215523af)
+## Changes Compared to the [Original Project](https://github.com/BlackJkee/NotPixelBot)
+
+This fork introduces several improvements:
+
+1. Headers to mimic the English-language [Telegram Desktop](https://desktop.telegram.org/) clients, specifically for use in the Portable version with `TDATA` auth.
+2. Auto painting with a [3x PX bonus](https://github.com/vanhbakaa/Notpixel-bot).
+3. Migrated from `Pip` to `Poetry` and from `Python 3.10` to `3.12`.
 
 ## Features
 
@@ -15,13 +21,10 @@
 | Proxy binding to session              |    ✔️     |
 | User-Agent binding to session         |    ✔️     |
 | Support for tdata / pyrogram .session |    ✔️     |
-| Registration in bot                   |    ✔️     |
 | Auto-paint                            |    ✔️     |
-| Auto-tasks                            |    ✔️     |
 | Auto-claim mining rewards             |    ✔️     |
 | Auto-upgrade boosters                 |    ✔️     |
 | Night sleep mode                      |    ✔️     |
-| Analytics game events                 |    ✔️     |
 
 </details>
 
@@ -29,33 +32,28 @@
 
 > :warning: **Warning:** Device type and country-specific headers can be changed under comment `# GLOBAL SETTINGS` in `bot/core/headers.py`.
 
-| Settings                   |                            Description                            |
-|----------------------------|:-----------------------------------------------------------------:|
-| **API_ID / API_HASH**      |       Platform data from which to run the Telegram session        |
-| **SLEEP_TIME**             |    Delay (seconds) between cycles (by default - [1200, 1800])     |
-| **START_DELAY**            | Delay (seconds) between sessions at start (by default - [5, 30])  |
-| **AUTO_PAINT**             |                 Auto painting (by default - True)                 |
-| **AUTO_MINING**            |           Auto claim mining reward (by default - True)            |
-| **X3_POINTS**              |      Auto paint specific pixel to get 3x px (default - True)      |
-| **COLOR_MAP_FILE**         | URL to JSON color map (default - URL to `maps/color_map_x3.json`) |
-| **AUTO_TASK**              |                  Auto tasks (by default - True)                   |
-| **AUTO_UPGRADE**           |             Auto upgrade boosters (by default - True)             |
-| **AUTO_UPGRADE_PAINT**     |           Auto upgrade paint reward (by default - True)           |
-| **AUTO_UPGRADE_RECHARGE**  |          Auto upgrade recharge speed (by default - True)          |
-| **AUTO_UPGRADE_ENERGY**    |           Auto upgrade energy limit (by default - True)           |
-| **MAX_PAINT_LEVEL**        |           Max level for paint booster (by default - 7)            |
-| **MAX_RECHARGE_LEVEL**     |          Max level for recharge booster (by default - 4)          |
-| **MAX_ENERGY_LEVEL**       |           Max level for energy booster (by default - 3)           |
-| **USE_RANDOM_COLOR**       |          Use random color from game (by default - True)           |
-| **OWN_COLOR**              |   Own color if USE_RANDOM_COLOR is False (by default - #FFFFFF)   |
-| **NIGHT_SLEEP**            |             Extra sleep at night (by default - True)              |
-| **NIGHT_SLEEP_START_TIME** |     Time (hour) when Night mode starts (by default - [0, 2])      |
-| **NIGHT_SLEEP_END_TIME**   |      Time (hour) when Night mode ends (by default - [4, 6])       |
-| **REF_ID**                 |                   Reference ID for registration                   |
+| Settings                   |                           Description                            |
+|----------------------------|:----------------------------------------------------------------:|
+| **API_ID / API_HASH**      |       Platform data from which to run the Telegram session       |
+| **SLEEP_TIME**             |    Delay (seconds) between cycles (by default - [3600, 5000])    |
+| **START_DELAY**            | Delay (seconds) between sessions at start (by default - [5, 30]) |
+| **X3_POINTS**              |     Auto paint specific pixel to get 3x px (default - True)      |
+| **AUTO_PAINT**             |                Auto painting (by default - True)                 |
+| **AUTO_MINING**            |           Auto claim mining reward (by default - True)           |
+| **AUTO_UPGRADE**           |            Auto upgrade boosters (by default - True)             |
+| **AUTO_UPGRADE_PAINT**     |          Auto upgrade paint reward (by default - True)           |
+| **AUTO_UPGRADE_RECHARGE**  |         Auto upgrade recharge speed (by default - True)          |
+| **AUTO_UPGRADE_ENERGY**    |          Auto upgrade energy limit (by default - True)           |
+| **MAX_PAINT_LEVEL**        |           Max level for paint booster (by default - 7)           |
+| **MAX_RECHARGE_LEVEL**     |         Max level for recharge booster (by default - 11)         |
+| **MAX_ENERGY_LEVEL**       |          Max level for energy booster (by default - 6)           |
+| **NIGHT_SLEEP**            |             Extra sleep at night (by default - True)             |
+| **NIGHT_SLEEP_START_TIME** |     Time (hour) when Night mode starts (by default - [0, 2])     |
+| **NIGHT_SLEEP_END_TIME**   |      Time (hour) when Night mode ends (by default - [4, 6])      |
 
 ## Prerequisites
 
-**Tested on Python 3.12.7**
+**Tested on Python 3.12.7, Windows 10 x64, Ubuntu 22.04 x64**
 
 Before you begin, make sure you have the following installed:
 
@@ -126,7 +124,7 @@ with configurations.
 If you already have sessions, simply place them in a folder `sessions` and run the `1. Run clicker`.
 During the startup process you can set a proxy for each session (`HTTP`, `SOCKS4`, `SOCKS5` proxy protocols are supported).
 
-JSON color [map](https://github.com/dedkuzmich/NotPixelBot/blob/master/maps/color_map_x3.json) for 3x PX bonus
+Color [map](https://github.com/dedkuzmich/NotPixelBot/blob/master/bot/utils/colors.py) for 3x PX bonus
 is updated daily with the latest values from [this](https://github.com/vanhbakaa/notpixel-3x-points) repo.
 
 ### Linux only
@@ -136,7 +134,7 @@ Create & detach a session:
 
 ```shell
 deactivate # Ensure you are outside poetry venv
-screen -S npx_session
+screen -S npx
 source $(poetry env info --path)/bin/activate
 python main.py
 # Detach session with Ctrl + A + D
@@ -146,7 +144,7 @@ Attach to the session:
 
 ```shell
 screen -ls
-screen -r npx_session
+screen -r npx
 deactivate
 exit # If you want to kill session completely
 ```
@@ -169,12 +167,3 @@ Example of `accounts.json`:
   }
 ]
 ```
-
-## Changes Compared to the [Original Project](https://github.com/BlackJkee/NotPixelBot)
-
-This fork introduces several improvements:
-
-1. Migrated from `Pip` to `Poetry`.
-2. Simplified project structure.
-3. Implemented a header to mimic the English-language [Telegram Desktop](https://desktop.telegram.org/) clients, specifically for use in the Portable version with `TDATA` auth.
-4. Implemented auto painting with a [3x PX bonus](https://github.com/vanhbakaa/Notpixel-bot) for special areas.

@@ -1,6 +1,7 @@
 # Custom data
 config.txt
 sessions/
+logs/
 
 
 # Byte-compiled / optimized / DLL files

@@ -1,6 +1,7 @@
 from enum import Enum
 from typing import Any
 from functools import total_ordering
+from bot.utils.colors import Color, colors
 
 
 @total_ordering
@@ -16,20 +17,7 @@ class League(Enum):
         return NotImplemented
 
 
-COLORS: list[str] = [
-    "#6A5CFF",
-    "#e46e6e",
-    "#FFD635",
-    "#7EED56",
-    "#00CCC0",
-    "#51E9F4",
-    "#94B3FF",
-    "#9C6926",
-    "#6D001A",
-    "#bf4300",
-    "#000000",
-    "#FFFFFF"
-]
+COLORS: list[Color] = colors
 
 TASKS: list[dict[str, Any]] = [
     {

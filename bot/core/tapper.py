@@ -3,6 +3,7 @@ import json
 from datetime import datetime
 import os
 import random
+from random import randint, choices, randrange
 from time import time
 from typing import Any
 from urllib.parse import unquote, quote, parse_qs
@@ -20,26 +21,27 @@ from bot.utils import logger
 from bot.exceptions import InvalidSession
 from .headers import headers
 
-from random import randint, choices
-
 from ..utils.analytics_event_content import content_data
 from ..utils.game_config import League, TASKS, UPGRADE_CHARGE_LIMIT, UPGRADE_RECHARGE_SPEED, UPGRADE_REPAINT, COLORS
 
 
-def calc_id(x: int, y: int, x1: int, y1: int):
-    px_id = randint(min(y, y1), max(y1, y)) * 1000
-    px_id += randint(min(x, x1), max(x1, x)) + 1
-    return px_id
-
-
-def generate_random_color(exclude_rgb = ""):
+def generate_random_color(exclude_hex = ""):
     while True:
-        r = random.randint(0, 255)
-        g = random.randint(0, 255)
-        b = random.randint(0, 255)
-        rgb = "#{:02X}{:02X}{:02X}".format(r, g, b)
-        if rgb != exclude_rgb:
-            return rgb
+        hex = COLORS[randrange(len(COLORS))].hex
+        if hex != exclude_hex:
+            return hex
+
+
+def hex_to_rgb(hex):
+    hex = hex.lstrip("#")
+    rgb = tuple(int(hex[i:i + 2], 16) for i in (0, 2, 4))
+    return rgb
+
+
+def color_square(hex):
+    r, g, b = hex_to_rgb(hex)
+    square = f"\033[38;2;{r};{g};{b}m■\033[0m"
+    return square
 
 
 class Tapper:
@@ -397,23 +399,25 @@ class Tapper:
             await asyncio.sleep(delay = 3)
 
     # PAINTER
-    async def get_data_x3(self, http_client: aiohttp.ClientSession) -> list:
+    async def get_data_x3(self) -> list:
         data = []
         try:
-            response = await http_client.get(settings.COLOR_MAP_FILE)
-            response.raise_for_status()
-            try:
-                text = await response.text()
-                color_map = json.loads(text)
-                data = random.choice(color_map["data"])
-                color = data["color"]
-                cord = random.choice(data["cordinates"])
-                px_id = calc_id(cord["start"][0], cord["start"][1], cord["end"][0], cord["end"][1])
-                data = [px_id, color]
-            except Exception as error:
-                logger.error(f"<blue>{self.session_name}</blue> | Map parsing error: <red>{error}</red>")
+            map = [color for color in COLORS if color.rects]
+            random_color = map[randrange(len(map))]
+            color = random_color.hex
+            rects = random_color.rects
+            rect = rects[randrange(len(rects))]
+            min_x, min_y = rect.tl
+            max_x, max_y = rect.br
+
+            x = randint(min_x, max_x)
+            y = randint(min_y, max_y)
+            px_id = y * 1000 + x + 1
+            data = [px_id, color]
+            msg = f"<blue>{self.session_name}</blue> | ★ Want to paint ({x}, {y}): <cyan>{px_id}</cyan>, color {color_square(color)} <cyan>{color}</cyan>"
+            logger.warning(msg)
         except Exception as error:
-            logger.error(f"<blue>{self.session_name}</blue> | Unable to download: <red>{error}</red>")
+            logger.error(f"<blue>{self.session_name}</blue> | Map parsing error: <red>{error}</red>")
         return data
 
     async def send_repaint_request(self, http_client: aiohttp.ClientSession, payload, charges_left = None) -> bool:
@@ -423,7 +427,8 @@ class Tapper:
             response.raise_for_status()
             res_json = await response.json()
             balance = int(res_json['balance'])
-            msg = f"<blue>{self.session_name}</blue> | Painted <cyan>{payload['pixelId']}</cyan>, color <cyan>{payload['newColor']}</cyan> | Balance: <blue>{balance}</blue>"
+            square = color_square(payload['newColor'])
+            msg = f"<blue>{self.session_name}</blue> | Painted <cyan>{payload['pixelId']}</cyan>, color {square} <cyan>{payload['newColor']}</cyan> | Balance: <blue>{balance}</blue>"
             if charges_left:
                 msg += f" | Charges left: <yellow>{charges_left}</yellow>"
             logger.success(msg)
@@ -434,7 +439,8 @@ class Tapper:
 
     async def paint_px(self, http_client: aiohttp.ClientSession, charges_left) -> bool:
         px_id = randint(1, 1000000)
-        color = settings.OWN_COLOR if not settings.USE_RANDOM_COLOR else random.choice(COLORS)
+        random_color = COLORS[randrange(len(COLORS))]
+        color = settings.OWN_COLOR if not settings.USE_RANDOM_COLOR else random_color.hex
         payload = {
             "pixelId": px_id,
             "newColor": color
@@ -442,10 +448,10 @@ class Tapper:
         result = await self.send_repaint_request(http_client, payload, charges_left)
         return result
 
-    async def paint_px_x3(self, http_client: aiohttp.ClientSession, charges_left, idx, data) -> bool:
+    async def paint_px_x3(self, http_client: aiohttp.ClientSession, charges_left: int, default_color: bool, data: list) -> bool:
         px_id, color = data
-        if idx % 2 != 0:  # If repainting the default color to non default
-            color = generate_random_color(exclude_rgb = color)  # Generate non default color
+        if not default_color:  # If repainting to non default
+            color = generate_random_color(exclude_hex = color)  # Generate non default color
         payload = {
             "pixelId": px_id,
             "newColor": color
@@ -536,18 +542,39 @@ class Tapper:
                                     logger.success(f"<blue>{self.session_name}</blue> | Got mining reward: <e>{result}</e> PX")
                                 await asyncio.sleep(delay = (randint(5, 10)))
 
+                        # TEST ONLY: start
+                        # default_color = False
+                        # x, y = 650, 300
+                        # px_id = y * 1000 + x + 1
+                        # data_x3 = [px_id, "#e46e6e"]
+                        # result = await self.paint_px_x3(http_client, charges, default_color, data_x3)
+                        # await asyncio.sleep(delay = randint(1, 2))
+                        #
+                        # data_x3 = [px_id, "#ffffff"]
+                        # default_color = True
+                        # result = await self.paint_px_x3(http_client, charges, default_color, data_x3)
+                        # exit(12)
+                        # TEST ONLY: end
+
                         if settings.AUTO_PAINT:
                             charges = int(mining_data["charges"])
-                            data_x3 = await self.get_data_x3(http_client)
-                            idx = 0
-                            while charges > 0:
+                            data_x3 = await self.get_data_x3()
+                            errors = 0
+                            default_color = False  # To get 3x PX, we should paint pixel to its non default color and then paint to default
+                            while charges > 0 and errors < 3:
                                 charges -= 1
-                                idx += 1
                                 if settings.X3_POINTS and data_x3:
-                                    result = await self.paint_px_x3(http_client, charges, idx, data_x3)
+                                    result = await self.paint_px_x3(http_client, charges, default_color, data_x3)
                                 else:
                                     result = await self.paint_px(http_client, charges)
-                                await asyncio.sleep(delay = randint(1, 3))
+                                default_color = not default_color  # Invert
+                                if not result:
+                                    errors += 1
+                                    charges += 1  # Restore charge
+                                    default_color = False  # Reset to non default
+                                    logger.error(f"<blue>{self.session_name}</blue> | <red>Unable to repaint, waiting for 10-15 sec...</red>")
+                                    await asyncio.sleep(delay = randint(10, 15))
+                                await asyncio.sleep(delay = randint(4, 6))
 
                     logger.info(f"<blue>{self.session_name}</blue> | Sleep 💤 <y>{round(sleep_time / 60, 1)}</y> min")
                     await asyncio.sleep(delay = sleep_time)
