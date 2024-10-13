@@ -423,7 +423,7 @@ class Tapper:
     async def send_repaint_request(self, http_client: aiohttp.ClientSession, payload, charges_left = None) -> bool:
         result = False
         try:
-            response = await http_client.post("https://notpx.app/api/v1/repaint/start", json = payload, headers = headers)
+            response = await http_client.post("https://notpx.app/api/v1/repaint/start", json = payload, headers = headers, verify_ssl = False)
             response.raise_for_status()
             res_json = await response.json()
             balance = int(res_json['balance'])
@@ -543,14 +543,18 @@ class Tapper:
                                 await asyncio.sleep(delay = (randint(5, 10)))
 
                         # TEST ONLY: start
-                        # default_color = False
-                        # x, y = 650, 300
-                        # px_id = y * 1000 + x + 1
-                        # data_x3 = [px_id, "#e46e6e"]
-                        # result = await self.paint_px_x3(http_client, charges, default_color, data_x3)
-                        # await asyncio.sleep(delay = randint(1, 2))
+                        # await asyncio.sleep(delay = randint(3, 5))
+                        # charges = 100
+                        # x, y = 554, 974
+                        # def_col = "#000000"
                         #
-                        # data_x3 = [px_id, "#ffffff"]
+                        # px_id = y * 1000 + x + 1
+                        # data_x3 = [px_id, def_col]
+                        #
+                        # default_color = False
+                        # result = await self.paint_px_x3(http_client, charges, default_color, data_x3)
+                        # await asyncio.sleep(randint(5, 7))
+                        #
                         # default_color = True
                         # result = await self.paint_px_x3(http_client, charges, default_color, data_x3)
                         # exit(12)
@@ -574,7 +578,7 @@ class Tapper:
                                     default_color = False  # Reset to non default
                                     logger.error(f"<blue>{self.session_name}</blue> | <red>Unable to repaint, waiting for 10-15 sec...</red>")
                                     await asyncio.sleep(delay = randint(10, 15))
-                                await asyncio.sleep(delay = randint(4, 6))
+                                await asyncio.sleep(delay = randint(5, 7))
 
                     logger.info(f"<blue>{self.session_name}</blue> | Sleep 💤 <y>{round(sleep_time / 60, 1)}</y> min")
                     await asyncio.sleep(delay = sleep_time)

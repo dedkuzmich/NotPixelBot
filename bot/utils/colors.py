@@ -66,38 +66,34 @@ colors = [
 # Use indexes to set rects. Index = Number -1
 # Rect([x1, y1], [x2, y2])
 # [x1, y2] is top-left pixel, [x2, y2] is bottom-right px
+# !!! 3x PX bonus doesn't work with colorful pixels, use only black (idx = 29)
 
-# idx 0-9, num 1-10
-colors[1].rects = [
-    Rect([470, 433], [488, 442]),
-    Rect([517, 395], [530, 414]),
-]
-colors[2].rects = [
-    Rect([271, 367], [296, 388])
-]
-colors[9].rects = [
-    Rect([550, 510], [600, 538]),
-    Rect([625, 294], [653, 309])
-]
+# colors[11].rects = [
+#     Rect([499, 920], [503, 927]),
+#     Rect([510, 920], [513, 926]),
+# ]
+#
+# colors[14].rects = [
+#     Rect([517, 916], [527, 917]),
+# ]
+#
+# colors[25].rects = [
+#     Rect([545, 941], [547, 949]),
+#     Rect([538, 939], [541, 940]),
+# ]
+#
+# colors[9].rects = [
+#     Rect([541, 922], [543, 924]),
+#     Rect([537, 922], [539, 924]),
+# ]
 
-# idx 10-19, num 11-20
-colors[12].rects = [
-    Rect([408, 563], [439, 582])
-]
-colors[14].rects = [
-    Rect([340, 420], [440, 440]),
-    Rect([520, 320], [580, 360])
-]
-colors[18].rects = [
-    Rect([736, 420], [750, 430])
-]
-
-# idx 20-29, num 21-30
-colors[24].rects = [
-    Rect([342, 702], [353, 754])
-]
-colors[28].rects = [
-    Rect([628, 430], [637, 447])
+colors[29].rects = [
+    Rect([493, 975], [495, 976]),
+    Rect([554, 974], [556, 976]),
+    Rect([493, 913], [494, 915]),
+    Rect([499, 932], [513, 936]),
+    Rect([517, 964], [529, 970]),
+    Rect([544, 953], [550, 959]),
 ]
 
 COLORS = colors
