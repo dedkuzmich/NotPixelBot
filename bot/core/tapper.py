@@ -423,7 +423,8 @@ class Tapper:
     async def send_repaint_request(self, http_client: aiohttp.ClientSession, payload, charges_left = None) -> bool:
         result = False
         try:
-            response = await http_client.post("https://notpx.app/api/v1/repaint/start", json = payload, headers = headers, verify_ssl = False)
+            timeout = aiohttp.ClientTimeout(total = 60)
+            response = await http_client.post("https://notpx.app/api/v1/repaint/start", json = payload, headers = headers, timeout = timeout)
             response.raise_for_status()
             res_json = await response.json()
             balance = int(res_json['balance'])
@@ -565,7 +566,7 @@ class Tapper:
                             data_x3 = await self.get_data_x3()
                             errors = 0
                             default_color = False  # To get 3x PX, we should paint pixel to its non default color and then paint to default
-                            while charges > 0 and errors < 3:
+                            while charges > 0 and errors < 2:  # 2 errors are allowed
                                 charges -= 1
                                 if settings.X3_POINTS and data_x3:
                                     result = await self.paint_px_x3(http_client, charges, default_color, data_x3)
