@@ -535,13 +535,10 @@ class Tapper:
                                 await asyncio.sleep(delay = randint(5, 15))
 
                         if settings.AUTO_MINING:
-                            time_from_start = mining_data['fromStart']
-                            max_mining_time = mining_data['maxMiningTime']
-                            if time_from_start > max_mining_time - randint(0, 7200):
-                                result = await self.claim_mining_reward(http_client = http_client)
-                                if result:
-                                    logger.success(f"<blue>{self.session_name}</blue> | Got mining reward: <e>{result}</e> PX")
-                                await asyncio.sleep(delay = (randint(5, 10)))
+                            result = await self.claim_mining_reward(http_client = http_client)
+                            if result:
+                                logger.success(f"<blue>{self.session_name}</blue> | Got mining reward: <e>{result}</e> PX")
+                            await asyncio.sleep(delay = (randint(5, 10)))
 
                         # TEST ONLY: start
                         # await asyncio.sleep(delay = randint(3, 5))
