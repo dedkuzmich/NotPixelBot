@@ -124,7 +124,18 @@ class Tapper:
 
         except Exception as error:
             logger.error(f"<blue>{self.session_name}</blue> | Unknown error during Authorization: 😢 <red>{error}</red>")
-            await asyncio.sleep(delay = 3)
+            await asyncio.sleep(delay = 7)
+            error = str(error)
+            if "Telegram says: [420 FLOOD_WAIT_X] - A wait of" in error:
+                eparts = error.split()
+                if len(eparts) >= 9:
+                    wait_str = eparts[8]
+                    try:
+                        wait_num = int(wait_str)
+                        await asyncio.sleep(delay = wait_num)
+                    except Exception as e:
+                        await asyncio.sleep(delay = 400)
+
 
     async def login(self, http_client: aiohttp.ClientSession, retry = 0):
         try:
